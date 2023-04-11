@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>geolocalisation</title>
+    <link href="https://api.wikiocity.com/lib/mlgl/latest/maplibre-gl.css" rel="stylesheet">
+    <link href="https://api.wikiocity.com/lib/wm/latest/wikiocity-style.css" rel="stylesheet">
+    <link href="https://api.wikiocity.com/lib/font-awesome/latest/css/all.min.css" rel="stylesheet">
+  
+    <!-- MglJS -->
+    <script src="https://api.wikiocity.com/lib/mlgl/latest/maplibre-gl.js"></script>
+    <script src="https://api.wikiocity.com/lib/wm/latest/wikiocity-maps.js"></script>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+
+<body>
+<style>
+        .map {
+            width: 100%;
+            height:100vh;
+        }
+</style>
+<form action="#" method="post" id="form" onsubmit="return false;">
+ <input class="form-control" id="search" placeholder="Search" type="text" style="width:auto">
+</form>
+<div id="map" class="map"></div>
+<script type="text/javascript">
+    //settings
+ var apiKey = '19058e6a4c3d5e13750ce6128';
+    var targetDivId = 'map';
+    var mapType = 'vector';
+    
+    var latitude = '0.0'; //latitude of your map center
+    var longitude = '-0.0'; //longitude of your map center
+    var startZoom =  '3';
+    
+ //map code
+    var center = [longitude,latitude];
+    var map = MglMap(apiKey, targetDivId, center, startZoom, mapType);
+ 
+ //Address information
+ var Addresses = [
+     { 'street' : '4522 Fredericksburg Rd', 'city' : 'Balcones Heights', 'region' : 'TX', 'postcode' : '78201' },
+     { 'street' : '746 NW Loop 410', 'city' : 'San Antonio', 'region' : 'TX', 'postcode' : '78216' },
+     { 'street' : '1223 Austin Hwy', 'city' : 'San Antonio', 'region' : 'TX', 'postcode' : '78209' }
+ ];
+ var markers = [];
+ //Loop through addresses, jquery ajax get each result, and add to markers array.  When complete, we run addMarkers to display them.
+ var getGeo = function(index){
+     if (Addresses.length == index) {
+         addMarkers(markers, map);
+         return;
+     }
+     $.ajax({
+         type: "GET",
+         url: "/r/search?street="+Addresses[index].street+"&city="+Addresses[index].city+"&region="+Addresses[index].region+"&postcode="+Addresses[index].postcode+"&country=US&key="+apiKey,
+         cache: true,                       
+         success: function(response){
+             markers.push({ 'name' : index, 'data':[response.lat, response.lon, '<div><p>'+Addresses[index].street+'</p></div>'] } );
+         },
+         complete: function() {
+           getGeo(++index);
+         }
+     });
+ };
+ getGeo(0);
+</script>
+    <script src="/script/geo.js"></script>
+</body>
+</html>
