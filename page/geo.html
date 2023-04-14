@@ -56,12 +56,13 @@
          return;
      }
      $.ajax({
-         type: "GET",
-         url: "/r/search?street="+Addresses[index].street+"&city="+Addresses[index].city+"&region="+Addresses[index].region+"&postcode="+Addresses[index].postcode+"&country=US&key="+apiKey,
-         cache: true,                       
-         success: function(response){
-             markers.push({ 'name' : index, 'data':[response.lat, response.lon, '<div><p>'+Addresses[index].street+'</p></div>'] } );
-         },
+        type: "GET",
+        url: "/r/search?street="+Addresses[index].street+"&city="+Addresses[index].city+"&region="+Addresses[index].region+"&postcode="+Addresses[index].postcode+"&country=US&key="+apiKey,
+        cache: true,                       
+        success: function(response){
+        markers.push({ 'name' : index, 'data':[response.lat, response.lon, '<div><p>'+Addresses[index].street+'</p></div>'] } );
+         
+        },
          complete: function() {
            getGeo(++index);
          }
