@@ -13,9 +13,8 @@ document.addEventListener("DOMContentLoaded",async ()=>{
     let img = document.createElement("img");
     img.src = `https://image.tmdb.org/t/p/w500/${data.poster_path
 }`  
-    content.style.background = `url("https://image.tmdb.org/t/p/w500/${data.backdrop_path}")`
-    content.style.backgroundSize = "cover"
-    content.style.opacity = 0.5
+    // content.style.background = `url("https://image.tmdb.org/t/p/w500/${data.backdrop_path}")`
+    // content.style.backgroundSize = "cover"
 
     tof.appendChild(img)
     titre.innerText = data.title
